@@ -16,10 +16,11 @@ Including another URLconf
 """
 from django.urls import path
 from . import views
-from apps import CatalogConfig
+from .apps import CatalogConfig
 
 app_name = CatalogConfig.name
 
 urlpatterns = [
-    path('catalog/', views.catalog, name='catalog'),
+    path('', views.home, name='home'),
+    path('contacts/', views.contacts, name='catalog'),
 ]
