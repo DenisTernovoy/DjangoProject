@@ -3,15 +3,16 @@ from django.http import HttpResponse
 
 # Create your views here.
 
+
 def contacts(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        phone = request.POST.get('phone')
-        message = request.POST.get('message')
+    if request.method == "POST":
+        name = request.POST.get("name")
+        phone = request.POST.get("phone")
+        message = request.POST.get("message")
 
         return HttpResponse(f"Спасибо, {name}! Мы обязательно Вам перезвоним.")
-    return render(request, 'contacts.html')
+    return render(request, "contacts.html")
 
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, "home.html")
