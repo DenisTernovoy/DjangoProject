@@ -1,4 +1,5 @@
 import json
+from itertools import product
 from pathlib import Path
 
 from django.core.management import call_command
@@ -13,7 +14,41 @@ class Command(BaseCommand):
         Category.objects.all().delete()
         Product.objects.all().delete()
 
-        category, _ = Category.objects.get_or_create()
-
         call_command("loaddata", "catalog_fixture.json")
         self.stdout.write(self.style.SUCCESS("Successfully loaded data from fixture"))
+
+        products = [
+            {
+                "name": "iPhone 16",
+                "description": "Отличный телефон",
+                "category_id": 1,
+                "price": 65000.00,
+            },
+            {
+                "name": "Nokia A2310",
+                "description": "Лучший телефон",
+                "category_id": 1,
+                "price": 1000.00,
+            },
+            {
+                "name": "Motorola W",
+                "description": "Легендарный телефон",
+                "category_id": 1,
+                "price": 800.00,
+            },
+        ]
+
+        for item in products:
+            new_product, created = Product.objects.get_or_create(**item)
+            new_product.save()
+
+            if created:
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        f"Successfully created product {new_product.name}"
+                    )
+                )
+            else:
+                self.stdout.write(
+                    self.style.WARNING(f"Product {new_product.name} already exists")
+                )

@@ -1,6 +1,19 @@
 from django.db import models
 
 
+class Contacts(models.Model):
+    country = models.CharField(max_length=100, verbose_name="Страна")
+    individual_number = models.CharField(max_length=100, verbose_name="ИНН")
+    address = models.CharField(max_length=250, verbose_name="Адрес")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Контакт"
+        verbose_name_plural = "Контакты"
+        ordering = ["-created_at", "country"]
+
+
 class Category(models.Model):
     name = models.CharField(
         max_length=100, null=False, blank=False, verbose_name="Наименование"
@@ -39,4 +52,4 @@ class Product(models.Model):
     class Meta:
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
-        ordering = ["name"]
+        ordering = ["-created_at"]

@@ -1,6 +1,22 @@
 from django.contrib import admin
 
-from catalog.models import Product, Category
+from catalog.models import Product, Category, Contacts
+
+
+@admin.register(Contacts)
+class ContactsAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "country",
+        "individual_number",
+        "address",
+    )
+    search_fields = (
+        "country",
+        "individual_number",
+        "address",
+    )
+    list_filter = ("country",)
 
 
 @admin.register(Category)
