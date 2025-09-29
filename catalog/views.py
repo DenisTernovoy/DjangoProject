@@ -18,10 +18,9 @@ def contacts(request):
 
 
 def home(request):
-    products = Product.objects.all()[:5]
-    for product in products:
-        print(product)
-    return render(request, "home.html")
+    products = Product.objects.all()
+    context = {"products": products}
+    return render(request, "home.html", context=context)
 
 
 def show_product(request, pk):
