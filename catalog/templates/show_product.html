@@ -1,0 +1,25 @@
+{% extends 'base_catalog.html' %}
+{% load my_tags %}
+
+{% block title %}Описание товара{% endblock %}
+{% block content %}
+<div class="row text-center">
+    <div class="col-12">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">{{product.name}}</h4>
+            </div>
+            <div class="card-body">
+                <h1 class="card-title pricing-card-title">{{product.price}} руб</h1>
+                <ul class="list-unstyled mt-3 mb-4 text-center m-3">
+                    <img height="200"
+                         src="{% if product.image %}{{product.image | show_product_photo}}{% else %}/media/catalog/photo/no_found.jpg{% endif %}">
+                    <li> Категория: {{product.category}}</li>
+                    <li>Описание: {{product.description|default:'отсутствует'}}</li>
+                </ul>
+                <button type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

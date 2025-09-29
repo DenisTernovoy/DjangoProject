@@ -24,4 +24,5 @@ app_name = CatalogConfig.name
 urlpatterns = [
     path("", views.home, name="home"),
     path("contacts/", views.contacts, name="catalog"),
+    path("show_product/<int:pk>/", views.show_product, name="show_product"),
 ]

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from catalog.models import Product, Contacts
 
@@ -22,3 +22,9 @@ def home(request):
     for product in products:
         print(product)
     return render(request, "home.html")
+
+
+def show_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    context = {"product": product}
+    return render(request, "show_product.html", context=context)
