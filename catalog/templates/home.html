@@ -11,19 +11,22 @@
 
 <div class="container">
     <div class="row text-center">
-        <div class="col-12">
+        <div class="col-12 d-flex flex-wrap justify-content-center">
             {% for product in products %}
-            <div class="card mb-4 box-shadow">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">{{product.name}}</h4>
-                </div>
-                <div class="card-body">
-                    <ul class="list-unstyled mt-3 mb-4 text-center m-3">
-                        <img height="200"
-                             src="{% if product.image %}{{product.image | show_product_photo}}{% else %}/media/catalog/photo/no_found.jpg{% endif %}">
-                        <li>Описание: {{product.description|truncatechars:100|default:'отсутствует'}}</li>
-                    </ul>
-                    <a type="button" class="btn btn-lg btn-block btn-outline-primary" href="{% url 'catalog:show_product' product.pk %}">О товаре</a>
+            <div class="col-3 m-2 align-items-center" style="height: 450px">
+                <div class="card mb-4 box-shadow h-100">
+                    <div class="card-header">
+                        <h5 class="my-0 font-weight-normal">{{product.name}}</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mt-3 mb-4 text-center m-3">
+                            <img height="150"
+                                 src="{% if product.image %}{{product.image | show_product_photo}}{% else %}/media/catalog/photo/no_found.jpg{% endif %}">
+                            <li>Описание: {{product.description|truncatechars:100|default:'отсутствует'}}</li>
+                        </ul>
+                        <a type="button" class="btn btn-lg btn-block btn-outline-primary"
+                           href="{% url 'catalog:show_product' product.pk %}">О товаре</a>
+                    </div>
                 </div>
             </div>
             {% endfor %}
