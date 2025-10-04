@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from catalog.models import Product, Contacts, Category
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -19,8 +20,11 @@ def contacts(request):
 
 def home(request):
     products = Product.objects.all()
-    context = {"products": products}
-    return render(request, "home.html", context=context)
+    paginator = Paginator(products, 6)
+    page_num = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_num)
+
+    return render(request, "home.html", context={"page_obj": page_obj})
 
 
 def show_product(request, pk):
