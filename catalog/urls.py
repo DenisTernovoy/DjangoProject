@@ -22,8 +22,12 @@ from .apps import CatalogConfig
 app_name = CatalogConfig.name
 
 urlpatterns = [
-    path("", views.home, name="home"),
-    path("contacts/", views.contacts, name="catalog"),
-    path("show_product/<int:pk>/", views.show_product, name="show_product"),
-    path("add_product/", views.add_product, name="add_product"),
+    path("", views.ProductListView.as_view(), name="product_list"),
+    path("contacts/", views.ContactsView.as_view(), name="contacts_view"),
+    path(
+        "product_detail/<int:pk>/",
+        views.ProductDetailView.as_view(),
+        name="product_detail",
+    ),
+    path("add_product/", views.ProductCreateView.as_view(), name="product_create"),
 ]
