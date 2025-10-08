@@ -3,6 +3,8 @@ from django.urls import reverse_lazy
 from .models import BlogNote
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 class BlogListView(ListView):
@@ -28,6 +30,21 @@ class BlogDetailView(DetailView):
         note = super().get_object(**kwargs)
         note.views_counter += 1
         note.save()
+
+        if note.views_counter == 100:
+            subject = "Достижение!"
+            message = (
+                f'Поздравляю. Объект с именем "{note.title}" посмотрели 100 раз!!!'
+            )
+            recipient_list = ["denis.ternovoi1@mail.ru"]
+
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                recipient_list,
+                fail_silently=False,
+            )
 
         return note
 
