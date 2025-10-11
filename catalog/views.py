@@ -1,11 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 
-from catalog.models import Product, Contacts, Category
+from catalog.models import Product, Contacts
 from django.core.paginator import Paginator
 from django.views.generic import ListView, DetailView, View
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView
 
 
 # Create your views here.
