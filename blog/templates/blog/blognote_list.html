@@ -1,8 +1,11 @@
 {% extends 'blog/blog_common.html' %}
 {% load blog_tags %}
 
+{% block title %}Блог{% endblock %}
+
 {% block content %}
 <div class="col-12 m-3 d-flex flex-column align-items-center justify-content-center">
+    <a href="{% url 'blog:blog_create' %}" class="btn px-2 btn-primary">Добавить запись</a>
     {% for note in blog_note %}
     <div class="card align-items-center mt-3" style="width: 18rem;">
         <img src="{{note.preview|show_photo}}" class="card-img-top" height="400px" alt="Фото недоступно">
