@@ -31,7 +31,11 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(
-        max_length=100, null=False, blank=False, verbose_name="Наименование"
+        max_length=100,
+        null=False,
+        blank=False,
+        verbose_name="Наименование",
+        unique=True,
     )
     description = models.TextField(null=True, blank=True, verbose_name="Описание")
     image = models.ImageField(

@@ -25,7 +25,7 @@
                             <li>Описание: {{product.description|truncatechars:100|default:'отсутствует'}}</li>
                         </ul>
                         <a type="button" class="btn btn-lg btn-block btn-outline-primary"
-                           href="{% url 'catalog:show_product' product.pk %}">О товаре</a>
+                           href="{% url 'catalog:product_detail' product.pk %}">О товаре</a>
                     </div>
                 </div>
             </div>

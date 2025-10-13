@@ -1,0 +1,21 @@
+{% extends 'blog/blog_common.html' %}
+
+{% block title %}
+{% if change_flag == True %} Изменение записи
+{% else %} Добавление записи
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="col-12 m-3 d-flex flex-column align-items-center justify-content-center">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button class="btn btn-primary" type="submit">
+            {% if change_flag == True %} Сохранить
+            {% else %} Опубликовать
+            {% endif %}
+        </button>
+    </form>
+</div>
+{% endblock %}
