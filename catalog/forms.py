@@ -22,9 +22,7 @@ class ProductForm(forms.ModelForm):
         fields = ["name", "description", "price", "category", "image"]
 
     def clean_name(self):
-        cleaned_data = super().clean()
-
-        name = cleaned_data.get("name")
+        name = self.cleaned_data.get("name")
 
         for word in name.split():
             if word.lower() in self.EXCLUDE_WORDS:
@@ -38,9 +36,7 @@ class ProductForm(forms.ModelForm):
         return name
 
     def clean_description(self):
-        cleaned_data = super().clean()
-
-        description = cleaned_data.get("description")
+        description = self.cleaned_data.get("description")
 
         for word in description.split():
             if word.lower() in self.EXCLUDE_WORDS:
@@ -49,3 +45,11 @@ class ProductForm(forms.ModelForm):
                 )
 
         return description
+
+    def clean_price(self):
+        price = self.cleaned_data.get("price")
+
+        if price < 0:
+            raise ValidationError("Цена не может быть отрицательной")
+
+        return price
