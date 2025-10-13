@@ -3,7 +3,28 @@ from catalog.models import Product
 from django.forms import ValidationError
 
 
-class ProductForm(forms.ModelForm):
+class StyleFormMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.instance_data = kwargs.get("instance")
+
+        for field_name, field in self.fields.items():
+            if isinstance(field, forms.CheckboxInput):
+                field.widget.attrs.update(
+                    {
+                        "class": "form-check",
+                    }
+                )
+            else:
+                field.widget.attrs.update(
+                    {
+                        "class": "form-control",
+                    }
+                )
+
+
+class ProductForm(StyleFormMixin, forms.ModelForm):
 
     EXCLUDE_WORDS = [
         "казино",
@@ -31,7 +52,14 @@ class ProductForm(forms.ModelForm):
                 )
 
         if Product.objects.filter(name=name).exists():
-            raise ValidationError("Продукт с таким наименованием уже существует")
+            if self.instance_data is not None:
+                name_base = self.instance_data.name
+                if name_base != name:
+                    raise ValidationError(
+                        "Продукт с таким наименованием уже существует"
+                    )
+            else:
+                raise ValidationError("Продукт с таким наименованием уже существует")
 
         return name
 

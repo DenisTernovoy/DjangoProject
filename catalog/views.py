@@ -43,6 +43,12 @@ class ProductUpdateView(UpdateView):
     form_class = ProductForm
     success_url = reverse_lazy("catalog:product_list")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["change"] = True
+
+        return context
+
 
 class ProductDeleteView(DeleteView):
     model = Product
