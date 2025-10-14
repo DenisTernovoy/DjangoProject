@@ -1,0 +1,14 @@
+{% extends 'base_catalog.html' %}
+
+{% block title %}Добавление товара{% endblock %}
+{% block content %}
+
+<div class="container">
+    <p>Вы действительно хотите удалить продукт '{{object.name}}' из базы?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Подтвердить</button>
+        <a class="btn btn-primary" href="{% url 'catalog:product_list' %}">Отмена</a>
+    </form>
+</div>
+{% endblock %}

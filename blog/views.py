@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
 
+from .forms import BlogNoteForm
 from .models import BlogNote
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -19,7 +20,7 @@ class BlogListView(ListView):
 
 class BlogCreateView(CreateView):
     model = BlogNote
-    fields = ("title", "content", "preview")
+    form_class = BlogNoteForm
     success_url = reverse_lazy("blog:blog_list")
 
 
@@ -51,12 +52,7 @@ class BlogDetailView(DetailView):
 
 class BlogUpdateView(UpdateView):
     model = BlogNote
-    fields = (
-        "title",
-        "content",
-        "preview",
-        "is_published",
-    )
+    form_class = BlogNoteForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
