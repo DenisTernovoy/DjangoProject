@@ -1,27 +1,7 @@
 from django import forms
 from catalog.models import Product
 from django.forms import ValidationError
-
-
-class StyleFormMixin:
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.instance_data = kwargs.get("instance")
-
-        for field_name, field in self.fields.items():
-            if isinstance(field, forms.CheckboxInput):
-                field.widget.attrs.update(
-                    {
-                        "class": "form-check",
-                    }
-                )
-            else:
-                field.widget.attrs.update(
-                    {
-                        "class": "form-control",
-                    }
-                )
+from config.forms import StyleFormMixin
 
 
 class ProductForm(StyleFormMixin, forms.ModelForm):

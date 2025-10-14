@@ -14,12 +14,12 @@ urlpatterns = [
     ),
     path("add_product/", views.ProductCreateView.as_view(), name="product_create"),
     path(
-        "product_detail/<int:pk>/update",
+        "product_detail/<int:pk>/update/",
         views.ProductUpdateView.as_view(),
         name="product_update",
     ),
     path(
-        "product_detail/<int:pk>/delete",
+        "product_detail/<int:pk>/delete/",
         views.ProductDeleteView.as_view(),
         name="product_delete",
     ),

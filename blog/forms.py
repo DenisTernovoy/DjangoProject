@@ -1,18 +1,7 @@
 from django import forms
 
 from blog.models import BlogNote
-
-
-class StyleFormMixin:
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        for field_name, field in self.fields.items():
-            print(field)
-            if isinstance(field, forms.BooleanField):
-                field.widget.attrs["class"] = "form-check-input"
-            else:
-                field.widget.attrs["class"] = "form-control"
+from config.forms import StyleFormMixin
 
 
 class BlogNoteForm(StyleFormMixin, forms.ModelForm):
