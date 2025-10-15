@@ -1,0 +1,13 @@
+{% extends 'base_catalog.html' %}
+
+{% block title %}Вход на сайт{% endblock %}
+{% block content %}
+
+<div class="container">
+    <form method="post" class="col-4" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Войти</button>
+    </form>
+</div>
+{% endblock %}
