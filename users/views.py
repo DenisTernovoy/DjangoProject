@@ -4,15 +4,15 @@ from django.contrib.auth.views import LogoutView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 
 from config import settings
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomUserUpdateForm
 from .models import CustomUser
 
 
 class RegisterView(CreateView):
-    template_name = "users/register.html"
+    template_name = "users/customuser_form.html"
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("catalog:product_list")
 
@@ -58,3 +58,9 @@ def confirm_email(request, token):
     user.save()
 
     return redirect("users:login")
+
+
+class UserUpdateView(UpdateView):
+    model = CustomUser
+    form_class = CustomUserUpdateForm
+    success_url = reverse_lazy("catalog:product_list")

@@ -16,3 +16,10 @@ class CustomUserCreationForm(StyleFormMixin, UserCreationForm):
             "password1",
             "password2",
         )
+
+
+class CustomUserUpdateForm(StyleFormMixin, forms.ModelForm):
+
+    class Meta:
+        model = CustomUser
+        fields = ("avatar", "country", "phone")
