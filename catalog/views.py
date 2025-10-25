@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -35,8 +36,15 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
-    form_class = ProductForm
+    form_class = ProductModerForm
     success_url = reverse_lazy("catalog:product_list")
+
+    def form_valid(self, form):
+        product = form.save(commit=False)
+        product.owner = self.request.user
+        product.save()
+
+        return super().form_valid(form)
 
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
@@ -51,16 +59,31 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         return context
 
     def get_form_class(self):
-        if self.request.user.has_perm("catalog.can_unpublish_product"):
+        user = self.request.user
+        if user == self.object.owner:
             return ProductModerForm
         else:
-            return ProductForm
+            raise PermissionDenied
 
 
-class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy("catalog:product_list")
-    permission_required = "catalog.delete_product"
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        if user != self.object.owner and not user.has_perm(
+            "catalog.can_unpublish_product"
+        ):
+            raise PermissionDenied
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        if not self.request.user.has_perm(
+            "catalog.can_unpublish_product"
+        ) and self.request.user != form.cleaned_data.get("owner"):
+            raise PermissionDenied
+        return super().form_valid(form)
 
 
 class ContactsView(LoginRequiredMixin, View):

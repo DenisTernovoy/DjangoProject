@@ -24,8 +24,15 @@
                         <li>Описание: {{product.description|default:'отсутствует'}}</li>
                     </ul>
                     <a type="button" class="btn btn-outline-primary" href="{% url 'catalog:product_list' %}">На главную</a>
+
+                    {% if user == product.owner %}
                     <a type="button" class="btn btn-secondary" href="{% url 'catalog:product_update' product.pk %}">Изменить</a>
+                    {% endif %}
+
+                    {% if perms.catalog.can_unpublish_product or user == product.owner %}
                     <a type="button" class="btn btn-danger" href="{% url 'catalog:product_delete' product.pk %}">Удалить</a>
+                    {% endif %}
+
                 </div>
             </div>
         </div>
