@@ -1,9 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
-
+from django.shortcuts import get_object_or_404, redirect
 from .forms import BlogNoteForm
 from .models import BlogNote
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.mail import send_mail
 from django.conf import settings
@@ -23,6 +24,14 @@ class BlogCreateView(CreateView):
     model = BlogNote
     form_class = BlogNoteForm
     success_url = reverse_lazy("blog:blog_list")
+
+    def form_valid(self, form):
+        user = self.request.user
+        blog_note = form.save(commit=False)
+        blog_note.owner = user
+        blog_note.save()
+
+        return super().form_valid(form)
 
 
 class BlogDetailView(DetailView):
@@ -53,7 +62,6 @@ class BlogDetailView(DetailView):
 
 class BlogUpdateView(UpdateView):
     model = BlogNote
-    form_class = BlogNoteForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -66,7 +74,54 @@ class BlogUpdateView(UpdateView):
 
         return success_url
 
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return BlogNoteForm
+        else:
+            raise PermissionDenied
+
 
 class BlogDeleteView(DeleteView):
     model = BlogNote
     success_url = reverse_lazy("blog:blog_list")
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        if user != self.object.owner and not user.has_perm(
+            "blog.can_unpublish_blog_note"
+        ):
+            raise PermissionDenied
+        return super().get_context_data(**kwargs)
+
+
+def drop_blog_note(request, pk):
+    if request.user.has_perm("blog.can_unpublish_blog_note"):
+        blog_note = get_object_or_404(BlogNote, pk=pk)
+        blog_note.is_published = False
+        blog_note.save()
+    else:
+        raise PermissionDenied
+
+    return redirect("blog:blog_list")
+
+
+def public_blog_note(request, pk):
+    blog_note = get_object_or_404(BlogNote, pk=pk)
+    if request.user == blog_note.owner:
+        blog_note.is_published = True
+        blog_note.save()
+    else:
+        raise PermissionDenied
+
+    return redirect("blog:blog_list")
+
+
+class UserBlogListView(LoginRequiredMixin, ListView):
+    model = BlogNote
+    context_object_name = "blog_note"
+
+    def get_queryset(self, **kwargs):
+        queryset = BlogNote.objects.filter(owner=self.request.user)
+
+        return queryset

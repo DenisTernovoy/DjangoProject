@@ -26,6 +26,7 @@
                         <li><a class="dropdown-item" href="{% url 'users:register' %}">Регистрация</a></li>
                         {% else %}
                         <li><a class="dropdown-item" href="{% url 'users:update' user.pk%}">Изменить профиль</a></li>
+                        <li><a class="dropdown-item" href="{% url 'blog:my_blog' user.pk%}">Мой блог</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
