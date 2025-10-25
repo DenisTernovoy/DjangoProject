@@ -48,6 +48,10 @@ class Product(models.Model):
         verbose_name="Категория",
     )
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена")
+    publication_status = models.BooleanField(
+        default=False, verbose_name="Статус публикации"
+    )
+
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     updated_at = models.DateTimeField(
         auto_now=True, verbose_name="Дата последнего изменения"
@@ -60,3 +64,6 @@ class Product(models.Model):
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
         ordering = ["-created_at"]
+        permissions = [
+            ("can_unpublish_product", "Can unpublish product"),
+        ]
