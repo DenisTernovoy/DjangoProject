@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
 from .forms import BlogNoteForm
@@ -8,7 +9,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
-class BlogListView(ListView):
+class BlogListView(LoginRequiredMixin, ListView):
     model = BlogNote
     context_object_name = "blog_note"
 
