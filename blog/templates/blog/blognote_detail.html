@@ -15,8 +15,6 @@
             <div class="d-flex mt-2 flex-row">
                 {% if user == object.owner %}
                 <a href="edit/" class="btn btn-primary m-2">Изменить</a>
-                {% endif %}
-                {% if user == object.owner or perms.blog.can_unpublish_blog_note %}
                 <a href="delete/" class="btn btn-primary m-2">Удалить</a>
                 {% endif %}
             </div>

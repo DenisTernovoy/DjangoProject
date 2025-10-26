@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
@@ -20,7 +21,7 @@ class BlogListView(LoginRequiredMixin, ListView):
         return queryset
 
 
-class BlogCreateView(CreateView):
+class BlogCreateView(LoginRequiredMixin, CreateView):
     model = BlogNote
     form_class = BlogNoteForm
     success_url = reverse_lazy("blog:blog_list")
@@ -60,7 +61,7 @@ class BlogDetailView(DetailView):
         return note
 
 
-class BlogUpdateView(UpdateView):
+class BlogUpdateView(LoginRequiredMixin, UpdateView):
     model = BlogNote
 
     def get_context_data(self, **kwargs):
@@ -82,30 +83,27 @@ class BlogUpdateView(UpdateView):
             raise PermissionDenied
 
 
-class BlogDeleteView(DeleteView):
+class BlogDeleteView(LoginRequiredMixin, DeleteView):
     model = BlogNote
     success_url = reverse_lazy("blog:blog_list")
 
     def get_context_data(self, **kwargs):
         user = self.request.user
-        if user != self.object.owner and not user.has_perm(
-            "blog.can_unpublish_blog_note"
-        ):
+        if user != self.object.owner:
             raise PermissionDenied
         return super().get_context_data(**kwargs)
 
 
+@permission_required("blog.can_unpublish_blog_note", raise_exception=True)
 def drop_blog_note(request, pk):
-    if request.user.has_perm("blog.can_unpublish_blog_note"):
-        blog_note = get_object_or_404(BlogNote, pk=pk)
-        blog_note.is_published = False
-        blog_note.save()
-    else:
-        raise PermissionDenied
+    blog_note = get_object_or_404(BlogNote, pk=pk)
+    blog_note.is_published = False
+    blog_note.save()
 
     return redirect("blog:blog_list")
 
 
+@login_required()
 def public_blog_note(request, pk):
     blog_note = get_object_or_404(BlogNote, pk=pk)
     if request.user == blog_note.owner:
