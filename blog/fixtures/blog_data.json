@@ -1,0 +1,38 @@
+[
+{
+    "model": "blog.blognote",
+    "pk": 7,
+    "fields": {
+        "title": "Статуя Иисуса Христа",
+        "content": "Очень красивая статуя Иисуса Христа в городе Вунгтау.",
+        "preview": "blog/photo/Статуя.jpg",
+        "created_at": "2025-10-08T07:23:07.242Z",
+        "is_published": true,
+        "views_counter": 4
+    }
+},
+{
+    "model": "blog.blognote",
+    "pk": 8,
+    "fields": {
+        "title": "Закат",
+        "content": "Невероятно красивый закат на пляже Bai Sau во Вьетнаме",
+        "preview": "blog/photo/Закат.jpg",
+        "created_at": "2025-10-08T07:36:16.241Z",
+        "is_published": true,
+        "views_counter": 8
+    }
+},
+{
+    "model": "blog.blognote",
+    "pk": 10,
+    "fields": {
+        "title": "Памятник",
+        "content": "На высоте примерно 300 ступеней до главной достопримечательности города Вунгтау встречается множество красивых памятников из белого камня.",
+        "preview": "blog/photo/Памятник_DR55LBE.jpg",
+        "created_at": "2025-10-08T16:00:14.239Z",
+        "is_published": true,
+        "views_counter": 115
+    }
+}
+]

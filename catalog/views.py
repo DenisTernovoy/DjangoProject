@@ -1,9 +1,10 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 
-from catalog.forms import ProductForm
+from catalog.forms import ProductForm, ProductModerForm
 from catalog.models import Product, Contacts
 from django.core.paginator import Paginator
 from django.views.generic import ListView, DetailView, View, UpdateView
@@ -35,8 +36,12 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
-    form_class = ProductForm
+    form_class = ProductModerForm
     success_url = reverse_lazy("catalog:product_list")
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
@@ -50,10 +55,32 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
 
         return context
 
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductModerForm
+        else:
+            raise PermissionDenied
+
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy("catalog:product_list")
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        if user != self.object.owner and not user.has_perm(
+            "catalog.can_unpublish_product"
+        ):
+            raise PermissionDenied
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        if not self.request.user.has_perm(
+            "catalog.can_unpublish_product"
+        ) and self.request.user != form.cleaned_data.get("owner"):
+            raise PermissionDenied
+        return super().form_valid(form)
 
 
 class ContactsView(LoginRequiredMixin, View):

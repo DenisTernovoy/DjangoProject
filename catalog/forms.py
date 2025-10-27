@@ -20,7 +20,13 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ["name", "description", "price", "category", "image"]
+        fields = [
+            "name",
+            "description",
+            "price",
+            "category",
+            "image",
+        ]
 
     def clean_name(self):
         name = self.cleaned_data.get("name")
@@ -76,3 +82,7 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
                 raise forms.ValidationError("Размер файла не должен превышать 5 МБ.")
 
         return file
+
+
+class ProductModerForm(ProductForm):
+    ProductForm.Meta.fields.append("publication_status")

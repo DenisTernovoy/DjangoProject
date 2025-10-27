@@ -13,9 +13,18 @@
             <h5 class="card-title">{{object.title}}</h5>
             <p class="card-text text-wrap" style="width: 300px;">{{object.content}}</p>
             <div class="d-flex mt-2 flex-row">
+                {% if user == object.owner %}
                 <a href="edit/" class="btn btn-primary m-2">Изменить</a>
                 <a href="delete/" class="btn btn-primary m-2">Удалить</a>
+                {% endif %}
             </div>
+            {% if perms.blog.can_unpublish_blog_note and object.is_published %}
+            <a href="drop/" class="btn btn-primary m-2">Снять с публикации</a>
+            {% endif %}
+
+            {% if user == object.owner and not object.is_published %}
+            <a href="public/" class="btn btn-primary m-2">Опубликовать</a>
+            {% endif %}
         </div>
     </div>
 </div>
