@@ -129,13 +129,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CACHE_ENABLED = "True" == os.getenv("CACHE_ENABLED")
 
-if CACHE_ENABLED:
-    CASHES = {
-        "default": {
-            "BACKEND": "django.core.cache.backends.redis.RedisCache",
-            "LOCATION": os.getenv("LOCATION"),
-        }
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": os.getenv("LOCATION"),
     }
+}
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.mail.ru"
