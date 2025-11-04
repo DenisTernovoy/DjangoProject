@@ -3,6 +3,8 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 from catalog.forms import ProductForm, ProductModerForm
 from catalog.models import Product, Contacts
@@ -30,6 +32,7 @@ class ProductListView(ListView):
         return context
 
 
+@method_decorator(cache_page(60), name="dispatch")
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
 
