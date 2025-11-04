@@ -23,4 +23,14 @@ urlpatterns = [
         views.ProductDeleteView.as_view(),
         name="product_delete",
     ),
+    path(
+        "categories/",
+        views.CategoryListView.as_view(),
+        name="categories_list",
+    ),
+    path(
+        "categories/<int:pk>/>",
+        views.ProductsCategoryListView.as_view(),
+        name="products_category",
+    ),
 ]
