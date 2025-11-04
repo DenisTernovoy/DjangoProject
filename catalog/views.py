@@ -7,10 +7,12 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 
 from catalog.forms import ProductForm, ProductModerForm
-from catalog.models import Product, Contacts
+from catalog.models import Product, Contacts, Category
 from django.core.paginator import Paginator
 from django.views.generic import ListView, DetailView, View, UpdateView
 from django.views.generic.edit import CreateView, DeleteView
+
+from catalog.services import get_products_of_category
 
 
 # Create your views here.
@@ -99,3 +101,26 @@ class ContactsView(LoginRequiredMixin, View):
         name = request.POST.get("name")
 
         return HttpResponse(f"Спасибо, {name}! Мы обязательно Вам перезвоним.")
+
+
+class CategoryListView(ListView):
+    model = Category
+    context_object_name = "categories"
+
+
+class ProductsCategoryListView(ListView):
+    model = Product
+    context_object_name = "products"
+    template_name = "catalog/category_products.html"
+
+    def get_queryset(self):
+        category_id = self.kwargs.get("pk")
+
+        return get_products_of_category(category_id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["category"] = Category.objects.get(pk=self.kwargs.get("pk"))
+
+        return context

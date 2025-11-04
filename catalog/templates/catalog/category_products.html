@@ -1,0 +1,36 @@
+{% extends 'base_catalog.html' %}
+{% load my_tags %}
+
+{% block title %}Каталог{% endblock %}
+{% block content %}
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Магазин электронной техники E-Shop</h1>
+    <p class="lead">{{category.name}}</p>
+</div>
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col-12 d-flex flex-wrap justify-content-center">
+            {% for product in products %}
+            <div class="col-3 m-2 align-items-center" style="height: 450px">
+                <div class="card mb-4 box-shadow h-100">
+                    <div class="card-header">
+                        <h5 class="my-0 font-weight-normal">{{product.name}}</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mt-3 mb-4 text-center m-3">
+                            <img height="150"
+                                 src="{% if product.image %}{{product.image | show_product_photo}}{% else %}/media/catalog/photo/no_found.jpg{% endif %}">
+                            <li>Описание: {{product.description|truncatechars:100|default:'отсутствует'}}</li>
+                        </ul>
+                        <a type="button" class="btn btn-lg btn-block btn-outline-primary"
+                           href="{% url 'catalog:product_detail' product.pk %}">О товаре</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
